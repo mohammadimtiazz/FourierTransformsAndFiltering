@@ -1,13 +1,15 @@
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
 
-
 void perfromDFT(Mat &src, Mat &dst);
 void computeMagnitude(Mat &src, Mat &dst);
 void rearrangeQuadFourierImg(Mat &src);
+
+
 
 void perfromDFT(Mat &src, Mat &dst) {
 	Mat padded;                            //expand input image to optimal size
@@ -45,6 +47,8 @@ void computeMagnitude(Mat &src, Mat &dst){
 	planes->release();
 }
 
+
+
 void rearrangeQuadFourierImg(Mat &src) {
 	// crop the spectrum, if it has an odd number of rows or columns
 	src = src(Rect(0, 0, src.cols & -2, src.rows & -2));
@@ -80,14 +84,20 @@ void rearrangeQuadFourierImg(Mat &src) {
 int main() {
 
 	//Reading images
-	string imgDir = "C:\\Users\\mimtiaz\\visualStudio17Projects\\getMeHired\\computerVision\\standard-test-images-for-Image-Processing\\standard_test_images\\lena.bmp";
-	Mat img = imread(imgDir, 0);
+	//string imgDir = "C:\\Users\\mimtiaz\\visualStudio17Projects\\getMeHired\\computerVision\\standard-test-images-for-Image-Processing\\standard_test_images\\lena.bmp";
+	string imgDir = "C:\\Users\\mimtiaz\\visualStudio17Projects\\getMeHired\\computerVision\\letters\\B2.png";
+	Mat img = imread(imgDir, IMREAD_COLOR);
+
+	
 
 	//checking for errors
 	if (img.empty()) {
 		printf("Error Reading images\n");
 		return -1;
 	}
+
+	//converting to gray
+	cvtColor(img, img, COLOR_BGR2GRAY);
 
 	Mat complexImg, magImg;
 	//Perform DFT
